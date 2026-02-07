@@ -29,6 +29,8 @@ export default async function NewMenuItemPage() {
         const price = parseFloat(formData.get('price') as string)
         const imageUrl = formData.get('image_url') as string
 
+        if (!restaurant) return
+
         await supabase.from('menu_items').insert({
             restaurant_id: restaurant.id,
             name,
