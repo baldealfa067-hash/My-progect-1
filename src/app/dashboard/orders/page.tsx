@@ -16,7 +16,11 @@ export default async function OrdersPage() {
         .eq('user_id', user.id)
         .single()
 
-    let orders: any[] = []
+    let orders: (any & {
+        order_items: (any & {
+            menu_items: { name: string } | null
+        })[]
+    })[] = []
 
     if (restaurant) {
         const { data } = await supabase
@@ -67,14 +71,14 @@ export default async function OrdersPage() {
                                     <div className="flex flex-col items-end">
                                         <span
                                             className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${order.status === 'pending'
-                                                    ? 'bg-yellow-100 text-yellow-800'
-                                                    : order.status === 'accepted'
-                                                        ? 'bg-blue-100 text-blue-800'
-                                                        : order.status === 'ready'
-                                                            ? 'bg-purple-100 text-purple-800'
-                                                            : order.status === 'completed'
-                                                                ? 'bg-green-100 text-green-800'
-                                                                : 'bg-red-100 text-red-800'
+                                                ? 'bg-yellow-100 text-yellow-800'
+                                                : order.status === 'accepted'
+                                                    ? 'bg-blue-100 text-blue-800'
+                                                    : order.status === 'ready'
+                                                        ? 'bg-purple-100 text-purple-800'
+                                                        : order.status === 'completed'
+                                                            ? 'bg-green-100 text-green-800'
+                                                            : 'bg-red-100 text-red-800'
                                                 }`}
                                         >
                                             {order.status === 'pending' && 'Pendente'}
@@ -94,7 +98,7 @@ export default async function OrdersPage() {
                                 <div className="mt-4">
                                     <h4 className="text-sm font-medium text-gray-900">Itens:</h4>
                                     <ul className="mt-2 list-inside list-disc text-sm text-gray-500">
-                                        {order.order_items.map((item: any) => (
+                                        {order.order_items.map((item: { id: string; quantity: number; menu_items: { name: string } | null }) => (
                                             <li key={item.id}>
                                                 {item.quantity}x {item.menu_items?.name}
                                             </li>

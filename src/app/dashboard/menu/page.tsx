@@ -17,7 +17,14 @@ export default async function MenuPage() {
         .eq('user_id', user.id)
         .single()
 
-    let menuItems: any[] = []
+    let menuItems: {
+        id: string
+        name: string
+        price: number
+        description: string | null
+        image_url: string | null
+        is_available: boolean
+    }[] = []
 
     if (restaurant) {
         const { data } = await supabase
@@ -83,8 +90,8 @@ export default async function MenuPage() {
                                 <div className="mt-4 flex items-center justify-between">
                                     <span
                                         className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${item.is_available
-                                                ? 'bg-green-100 text-green-700'
-                                                : 'bg-red-100 text-red-700'
+                                            ? 'bg-green-100 text-green-700'
+                                            : 'bg-red-100 text-red-700'
                                             }`}
                                     >
                                         {item.is_available ? 'Disponível' : 'Indisponível'}
