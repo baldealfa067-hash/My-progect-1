@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 export default function AdminPage() {
     return (
         <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -74,7 +76,13 @@ export default function AdminPage() {
                                 <td className="px-10 py-8">
                                     <div className="flex items-center gap-4">
                                         <div className="w-14 h-14 rounded-xl overflow-hidden shadow-sm border border-border">
-                                            <img src="https://images.unsplash.com/photo-1517248135467-4c7ed9d8c47c?w=100&h=100&fit=crop" alt="Logo" className="w-full h-full object-cover" />
+                                            <Image
+                                                src="https://images.unsplash.com/photo-1517248135467-4c7ed9d8c47c?w=100&h=100&fit=crop"
+                                                alt="Logo"
+                                                width={100}
+                                                height={100}
+                                                className="w-full h-full object-cover"
+                                            />
                                         </div>
                                         <div>
                                             <p className="font-extrabold text-foreground text-lg">Sabores da Bissau</p>
