@@ -16,11 +16,23 @@ export default async function OrdersPage() {
         .eq('user_id', user.id)
         .single()
 
-    let orders: (any & {
-        order_items: (any & {
-            menu_items: { name: string } | null
-        })[]
-    })[] = []
+    interface OrderItem {
+        id: string
+        quantity: number
+        menu_items: { name: string } | null
+    }
+
+    interface Order {
+        id: string
+        customer_name: string
+        customer_phone: string
+        status: string
+        total_amount: number
+        created_at: string
+        order_items: OrderItem[]
+    }
+
+    let orders: Order[] = []
 
     if (restaurant) {
         const { data } = await supabase
@@ -98,7 +110,7 @@ export default async function OrdersPage() {
                                 <div className="mt-4">
                                     <h4 className="text-sm font-medium text-gray-900">Itens:</h4>
                                     <ul className="mt-2 list-inside list-disc text-sm text-gray-500">
-                                        {order.order_items.map((item: { id: string; quantity: number; menu_items: { name: string } | null }) => (
+                                        {order.order_items.map((item: OrderItem) => (
                                             <li key={item.id}>
                                                 {item.quantity}x {item.menu_items?.name}
                                             </li>
