@@ -22,7 +22,6 @@ export default async function NewPartnerPage() {
         // For this MVP demonstration, we assume we want to link it to a specific user_id
         // Since we don't have a user creation flow here, we'll just check if the user exists
 
-        const { data: userData } = await supabase.from('auth.users').select('id').eq('email', user_email).single()
 
         // For MVP, if user doesn't exist, we might just fail or use the admin's ID (not ideal)
         // Let's just create it with a placeholder logic or expect a valid user ID for now
