@@ -8,6 +8,8 @@ import { useState, useEffect } from 'react'
 
 const ADMIN_EMAIL = 'baldealfa067@gmail.com'
 
+import { User } from '@supabase/supabase-js'
+
 export default function AdminLayout({
     children,
 }: {
@@ -15,7 +17,7 @@ export default function AdminLayout({
 }) {
     const pathname = usePathname()
     const router = useRouter()
-    const [user, setUser] = useState<any>(null)
+    const [user, setUser] = useState<User | null>(null)
     const [isMenuOpen, setIsMenuOpen] = useState(false)
 
     useEffect(() => {

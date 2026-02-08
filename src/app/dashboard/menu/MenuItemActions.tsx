@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import Link from 'next/link'
 
-export function MenuItemActions({ item }: { item: any }) {
+export function MenuItemActions({ item }: { item: { id: string, is_available: boolean } }) {
     const router = useRouter()
     const [loading, setLoading] = useState(false)
 
@@ -16,7 +16,7 @@ export function MenuItemActions({ item }: { item: any }) {
         try {
             await deleteMenuItem(item.id)
             router.refresh()
-        } catch (error) {
+        } catch {
             alert('Erro ao excluir item')
         } finally {
             setLoading(false)
@@ -28,7 +28,7 @@ export function MenuItemActions({ item }: { item: any }) {
         try {
             await toggleMenuItemAvailability(item.id, !item.is_available)
             router.refresh()
-        } catch (error) {
+        } catch {
             alert('Erro ao atualizar disponibilidade')
         } finally {
             setLoading(false)

@@ -6,6 +6,8 @@ import { usePathname, useRouter } from 'next/navigation'
 import { logout } from '../auth/actions'
 import { useState, useEffect } from 'react'
 
+import { User } from '@supabase/supabase-js'
+
 export default function DashboardLayout({
     children,
 }: {
@@ -13,8 +15,9 @@ export default function DashboardLayout({
 }) {
     const pathname = usePathname()
     const router = useRouter()
-    const [user, setUser] = useState<any>(null)
+    const [user, setUser] = useState<User | null>(null)
     const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const [recentOrders, setRecentOrders] = useState<any[]>([]) // Added recentOrders state
 
     useEffect(() => {
         const checkUser = async () => {

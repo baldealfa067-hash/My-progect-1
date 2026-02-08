@@ -14,13 +14,13 @@ export default async function DashboardPage() {
         .eq('user_id', user.id)
         .single()
 
-    let stats = {
+    const stats = {
         pending: 0,
         today: 0,
         revenue: 0
     }
 
-    let recentOrders: any[] = []
+    let recentOrders: any[] = [] // satisfying the 'any' lint if possible, but the error was on other lines
 
     if (restaurant) {
         // Fetch stats
@@ -35,10 +35,10 @@ export default async function DashboardPage() {
 
         if (ordersToday) {
             stats.today = ordersToday.length
-            stats.pending = ordersToday.filter(o => o.status === 'pending').length
+            stats.pending = ordersToday.filter((o: { status: string }) => o.status === 'pending').length
             stats.revenue = ordersToday
-                .filter(o => o.status === 'completed')
-                .reduce((acc, current) => acc + Number(current.total_amount), 0)
+                .filter((o: { status: string }) => o.status === 'completed')
+                .reduce((acc: number, current: { total_amount: number }) => acc + Number(current.total_amount), 0)
         }
 
         // Fetch recent orders
@@ -176,7 +176,7 @@ export default async function DashboardPage() {
                                         </div>
                                         <p className="text-sm font-bold text-secondary/60 tracking-wider font-mono">{order.customer_phone}</p>
                                         <div className="pt-3 flex flex-wrap gap-3">
-                                            {order.order_items.map((item: any) => (
+                                            {order.order_items.map((item: { id: string, quantity: number, menu_items: { name: string } | null }) => (
                                                 <span key={item.id} className="px-4 py-1.5 bg-background/50 border border-border/5 rounded-xl text-[11px] font-black text-secondary tracking-tight">
                                                     {item.quantity}x {item.menu_items?.name}
                                                 </span>

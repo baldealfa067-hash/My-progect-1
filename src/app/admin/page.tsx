@@ -1,5 +1,5 @@
 import { createClient } from '@/utils/supabase/server'
-import Image from 'next/image'
+import Link from 'next/link'
 
 export default async function AdminPage() {
     const supabase = await createClient()
@@ -10,7 +10,7 @@ export default async function AdminPage() {
             <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
                 <h1 className="text-2xl font-bold text-red-600">Acesso Negado</h1>
                 <p className="text-secondary">Você não tem permissão para visualizar esta página.</p>
-                <a href="/" className="px-6 py-2 bg-primary text-white rounded-xl font-bold">Voltar ao Início</a>
+                <Link href="/" className="px-6 py-2 bg-primary text-white rounded-xl font-bold">Voltar ao Início</Link>
             </div>
         )
     }
@@ -26,13 +26,19 @@ export default async function AdminPage() {
         .from('orders')
         .select('*')
 
+    // Define a type for the order object to ensure type safety
+    type Order = {
+        status: string;
+        total_amount: number;
+    };
+
     const stats = {
         totalRestaurants: restaurants?.length || 0,
         activeRestaurants: restaurants?.length || 0, // Simplified for MVP
         totalOrders: allOrders?.length || 0,
-        totalRevenue: allOrders
-            ?.filter(o => o.status === 'completed')
-            .reduce((acc, curr) => acc + Number(curr.total_amount), 0) || 0
+        totalRevenue: ((allOrders || []) as Order[]) // Cast to Order[] for type safety
+            ?.filter((o: Order) => o.status === 'completed')
+            .reduce((acc: number, current: Order) => acc + Number(current.total_amount), 0) || 0
     }
 
     return (
@@ -113,7 +119,7 @@ export default async function AdminPage() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border/5">
-                            {restaurants?.map((res) => (
+                            {restaurants?.map((res: { id: string, name: string, slug: string, created_at: string }) => (
                                 <tr key={res.id} className="hover:bg-white/0.5 transition-all group">
                                     <td className="px-10 py-10">
                                         <div className="flex items-center gap-6">
