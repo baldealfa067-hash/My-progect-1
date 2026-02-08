@@ -13,6 +13,12 @@ export default async function NewPartnerPage() {
     async function createPartner(formData: FormData) {
         'use server'
         const supabase = await createClient()
+        const { data: { user } } = await supabase.auth.getUser()
+
+        if (!user) {
+            redirect('/login')
+        }
+
         const name = formData.get('name') as string
         const slug = formData.get('slug') as string
         const description = formData.get('description') as string
