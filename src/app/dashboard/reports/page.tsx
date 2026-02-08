@@ -20,8 +20,8 @@ export default async function ReportsPage() {
         .select('status, total_amount, created_at')
         .eq('restaurant_id', restaurant?.id)
 
-    const totalRevenue = orderStats?.reduce((acc, order) => acc + Number(order.total_amount), 0) || 0
-    const completedOrders = orderStats?.filter(o => o.status === 'completed').length || 0
+    const totalRevenue = orderStats?.reduce((acc: number, order: { total_amount: number }) => acc + Number(order.total_amount), 0) || 0
+    const completedOrders = orderStats?.filter((o: { status: string }) => o.status === 'completed').length || 0
 
     return (
         <div className="space-y-12 animate-in fade-in duration-700">
@@ -87,7 +87,7 @@ export default async function ReportsPage() {
                                 { name: 'Pizza de Muzamba', sales: 42, growth: '+12%' },
                                 { name: 'Peixe na Braza', sales: 38, growth: '+8%' },
                                 { name: 'Arroz de Granja', sales: 25, growth: '-2%' }
-                            ].map((item, i) => (
+                            ].map((item: { name: string, sales: number, growth: string }, i: number) => (
                                 <div key={i} className="flex items-center justify-between">
                                     <div>
                                         <p className="font-bold text-foreground">{item.name}</p>
