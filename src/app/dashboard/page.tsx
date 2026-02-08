@@ -206,7 +206,12 @@ export default async function DashboardPage() {
                                         {new Intl.NumberFormat('pt-GW', { style: 'currency', currency: 'XOF' }).format(order.total_amount)}
                                     </p>
                                     <div className="lg:scale-110">
-                                        <OrderActions orderId={order.id} status={order.status} />
+                                        <OrderActions
+                                            orderId={order.id}
+                                            status={order.status}
+                                            customerName={order.customer_name}
+                                            customerPhone={order.customer_phone}
+                                        />
                                     </div>
                                 </div>
                             </div>
