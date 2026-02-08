@@ -17,21 +17,18 @@ export default async function AdminRestaurantsPage() {
         .order('created_at', { ascending: false })
 
     return (
-        <div className="space-y-12 animate-in fade-in duration-700">
+        <div className="space-y-10 animate-in fade-in duration-700">
             {/* Page Header */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div>
-                    <h1 className="text-4xl font-black text-foreground tracking-tighter mb-2">Restaurantes Parceiros</h1>
-                    <div className="flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 bg-primary rounded-full"></span>
-                        <p className="text-[10px] font-bold text-secondary uppercase tracking-widest opacity-50">Gestão Global do Ecossistema</p>
-                    </div>
+                    <h1 className="text-4xl font-black text-slate-900 tracking-tighter mb-1">Restaurantes Parceiros</h1>
+                    <p className="text-sm font-bold text-slate-400 tracking-tight">Gestão detalhada do ecossistema BissauFood.</p>
                 </div>
 
-                <div className="flex items-center gap-4 bg-white/5 p-2 rounded-2xl glass">
-                    <div className="px-6 py-2 text-center border-r border-white/5">
-                        <p className="text-[10px] font-black text-secondary tracking-widest uppercase opacity-40">Total</p>
-                        <p className="text-xl font-black text-foreground">{restaurants?.length || 0}</p>
+                <div className="flex items-center gap-4">
+                    <div className="px-6 py-3 bg-white border border-slate-100 rounded-2xl shadow-sm text-center">
+                        <p className="text-[10px] font-black text-slate-400 tracking-widest uppercase mb-0.5">Total de Ativos</p>
+                        <p className="text-xl font-black text-slate-900">{restaurants?.length || 0}</p>
                     </div>
                 </div>
             </div>
@@ -70,9 +67,9 @@ export default async function AdminRestaurantsPage() {
                                         {new Date(restaurant.created_at).toLocaleDateString('pt-BR')}
                                     </td>
                                     <td className="px-8 py-6 text-right">
-                                        <button className="px-4 py-2 glass rounded-xl text-[10px] font-black text-secondary hover:text-white hover:bg-white/5 transition-all uppercase tracking-widest">
+                                        <Link href={`/admin/restaurants/${restaurant.id}`} className="px-5 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-[10px] font-black text-slate-400 hover:text-primary hover:border-primary/20 transition-all uppercase tracking-widest shadow-sm">
                                             Detalhes
-                                        </button>
+                                        </Link>
                                     </td>
                                 </tr>
                             ))}

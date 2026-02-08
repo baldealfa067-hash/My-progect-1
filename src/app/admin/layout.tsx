@@ -45,49 +45,48 @@ export default function AdminLayout({
     return (
         <div className="min-h-screen bg-background text-foreground flex overflow-hidden">
             {/* Desktop Sidebar */}
-            <aside className="hidden lg:flex flex-col w-72 h-screen glass border-r border-border/10 p-6 space-y-8 sticky top-0">
-                <div className="flex items-center gap-3 px-2">
-                    <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-glow">
-                        <span className="text-white font-black text-xl">B</span>
-                    </div>
-                    <span className="text-xl font-black tracking-tighter uppercase whitespace-nowrap">ADMIN PANEL</span>
+            <aside className="hidden lg:flex flex-col w-24 h-screen bg-[#0F172A] border-r border-white/5 p-4 items-center space-y-10 sticky top-0 py-10 z-[70]">
+                {/* Logo Area */}
+                <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center shadow-lg shadow-primary/20 cursor-pointer hover:rotate-6 transition-transform">
+                    <svg viewBox="0 0 24 24" className="w-7 h-7 text-white" fill="none" stroke="currentColor" strokeWidth="2.5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.333 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                    </svg>
                 </div>
 
-                <nav className="flex-grow space-y-2">
+                {/* Nav Items */}
+                <nav className="flex-grow flex flex-col items-center gap-6">
                     {navItems.map((item) => {
                         const isActive = pathname === item.href
                         return (
                             <Link
                                 key={item.label}
                                 href={item.href}
-                                className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl text-sm font-bold transition-all group ${isActive
-                                    ? 'bg-primary text-white shadow-glow'
-                                    : 'text-secondary hover:text-white hover:bg-white/5'
+                                className={`group relative w-12 h-12 flex items-center justify-center rounded-2xl border transition-all duration-300 ${isActive
+                                    ? 'bg-primary border-primary shadow-lg shadow-primary/20 text-white'
+                                    : 'border-transparent text-slate-500 hover:bg-white/5 hover:text-slate-200'
                                     }`}
                             >
-                                <svg className="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={item.icon} />
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d={item.icon} />
                                 </svg>
-                                {item.label}
+
+                                {/* Tooltip */}
+                                <div className="absolute left-full ml-4 px-3 py-1.5 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
+                                    {item.label}
+                                </div>
                             </Link>
                         )
                     })}
                 </nav>
 
-                <div className="pt-6 border-t border-border/10">
-                    <div className="mb-6 px-4">
-                        <p className="text-[10px] font-black text-secondary tracking-widest uppercase opacity-40 mb-1">Logado como</p>
-                        <p className="text-xs font-bold text-secondary truncate">{user.email}</p>
-                    </div>
-                    <form action={logout}>
-                        <button className="flex items-center gap-4 w-full px-4 py-3.5 rounded-2xl text-sm font-bold text-secondary hover:text-red-400 hover:bg-red-400/5 transition-all group">
-                            <svg className="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                            </svg>
-                            Logout
-                        </button>
-                    </form>
-                </div>
+                {/* Logout Action */}
+                <form action={logout}>
+                    <button className="w-12 h-12 flex items-center justify-center rounded-2xl border border-transparent text-slate-500 hover:bg-red-500/10 hover:text-red-400 transition-all group">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                    </button>
+                </form>
             </aside>
 
             {/* Main Content */}
@@ -132,9 +131,9 @@ export default function AdminLayout({
                     </div>
                 )}
 
-                {/* Content Area */}
-                <main className="flex-grow p-4 lg:p-12">
-                    <div className="max-w-7xl mx-auto h-full">
+                {/* Main Content Area */}
+                <main className="flex-grow p-4 lg:p-8 overflow-x-hidden relative">
+                    <div className="max-w-7xl mx-auto h-full space-y-8">
                         {children}
                     </div>
                 </main>
