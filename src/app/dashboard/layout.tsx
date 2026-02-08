@@ -17,7 +17,6 @@ export default function DashboardLayout({
     const router = useRouter()
     const [user, setUser] = useState<User | null>(null)
     const [isMenuOpen, setIsMenuOpen] = useState(false)
-    const [recentOrders, setRecentOrders] = useState<any[]>([]) // Added recentOrders state
 
     useEffect(() => {
         const checkUser = async () => {

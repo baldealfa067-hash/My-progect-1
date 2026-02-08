@@ -20,7 +20,23 @@ export default async function DashboardPage() {
         revenue: 0
     }
 
-    let recentOrders: any[] = [] // satisfying the 'any' lint if possible, but the error was on other lines
+    interface OrderItem {
+        id: string;
+        quantity: number;
+        menu_items: { name: string } | null;
+    }
+
+    interface Order {
+        id: string;
+        customer_name: string;
+        customer_phone: string;
+        status: string;
+        total_amount: number;
+        order_items: OrderItem[];
+        created_at: string;
+    }
+
+    let recentOrders: Order[] = []
 
     if (restaurant) {
         // Fetch stats
