@@ -1,5 +1,6 @@
 import { createClient } from '@/utils/supabase/server'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default async function AdminPage() {
     const supabase = await createClient()
@@ -56,7 +57,12 @@ export default async function AdminPage() {
                         <div className="flex -space-x-3">
                             {[1, 2, 3].map((i) => (
                                 <div key={i} className="w-10 h-10 rounded-full border-4 border-white bg-slate-100 overflow-hidden shadow-sm">
-                                    <img src={`https://i.pravatar.cc/100?img=${i + 10}`} alt="User" className="w-full h-full object-cover" />
+                                    <Image
+                                        src={`https://i.pravatar.cc/100?img=${i + 10}`}
+                                        alt="User"
+                                        fill
+                                        className="object-cover"
+                                    />
                                 </div>
                             ))}
                             <div className="w-10 h-10 rounded-full border-4 border-white bg-slate-900 flex items-center justify-center text-[10px] font-black text-white shadow-sm">
@@ -134,14 +140,15 @@ export default async function AdminPage() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-50">
-                            {restaurants?.map((res) => (
+                            {restaurants?.map((res: { id: string, name: string, slug: string, created_at: string }) => (
                                 <tr key={res.id} className="hover:bg-slate-50/50 transition-colors group">
                                     <td className="px-8 py-6">
                                         <div className="flex items-center gap-4">
                                             <div className="w-12 h-12 rounded-2xl bg-slate-100 overflow-hidden border border-slate-100 shadow-sm relative group-hover:scale-105 transition-transform">
-                                                <img
+                                                <Image
                                                     src={`https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=100&auto=format&fit=crop`}
-                                                    className="w-full h-full object-cover"
+                                                    fill
+                                                    className="object-cover"
                                                     alt={res.name}
                                                 />
                                             </div>

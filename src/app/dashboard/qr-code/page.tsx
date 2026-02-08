@@ -1,5 +1,7 @@
 import { createClient } from '@/utils/supabase/server'
 import Link from 'next/link'
+import Image from 'next/image'
+import { QRActions } from './QRActions'
 
 export default async function QRCodePage() {
     const supabase = await createClient()
@@ -42,10 +44,13 @@ export default async function QRCodePage() {
                         <div className="relative group">
                             <div className="absolute -inset-4 bg-primary/20 rounded-[40px] blur-2xl group-hover:bg-primary/30 transition-all duration-700"></div>
                             <div className="relative glass p-10 rounded-[40px] border-white/10 shadow-2xl">
-                                <img
+                                <Image
                                     src={qrCodeUrl}
                                     alt="QR Code do Restaurante"
-                                    className="w-64 h-64 md:w-80 md:h-80 object-contain rounded-2xl"
+                                    width={320}
+                                    height={320}
+                                    className="object-contain rounded-2xl"
+                                    unoptimized
                                 />
                             </div>
                         </div>
@@ -57,22 +62,7 @@ export default async function QRCodePage() {
                             </div>
                         </div>
 
-                        <div className="flex flex-col sm:flex-row gap-4 w-full pt-6">
-                            <button
-                                onClick={() => window.print()}
-                                className="flex-1 px-8 py-4 bg-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-glow hover:scale-[1.02] transition-all"
-                            >
-                                Imprimir QR Code
-                            </button>
-                            <a
-                                href={qrCodeUrl}
-                                download="qrcode.png"
-                                target="_blank"
-                                className="flex-1 px-8 py-4 glass text-secondary rounded-2xl text-[10px] font-black uppercase tracking-widest hover:text-white transition-all text-center"
-                            >
-                                Download Imagem
-                            </a>
-                        </div>
+                        <QRActions qrCodeUrl={qrCodeUrl} />
                     </div>
                 </div>
 
@@ -99,7 +89,7 @@ export default async function QRCodePage() {
                     <div className="premium-card p-10 bg-primary/5 border-primary/20">
                         <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-4">Dica de Sucesso</p>
                         <p className="text-sm font-bold text-foreground leading-relaxed">
-                            "Restaurantes que usam cardápio digital via QR Code reduzem o tempo de atendimento em até 20% e aumentam o ticket médio com sugestões automáticas."
+                            &quot;Restaurantes que usam cardápio digital via QR Code reduzem o tempo de atendimento em até 20% e aumentam o ticket médio com sugestões automáticas.&quot;
                         </p>
                     </div>
                 </div>

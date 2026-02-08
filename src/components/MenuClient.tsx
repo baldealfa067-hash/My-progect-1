@@ -3,10 +3,25 @@
 import React from 'react'
 import { useCart } from './CartContext'
 import Link from 'next/link'
+import Image from 'next/image'
+
+interface MenuItem {
+    id: string
+    name: string
+    price: number
+    description: string | null
+    image_url: string | null
+}
+
+interface Restaurant {
+    id: string
+    name: string
+    description: string | null
+}
 
 interface MenuClientProps {
-    restaurant: any
-    menuItems: any[]
+    restaurant: Restaurant
+    menuItems: MenuItem[]
 }
 
 export function MenuClient({ restaurant, menuItems }: MenuClientProps) {
@@ -53,10 +68,11 @@ export function MenuClient({ restaurant, menuItems }: MenuClientProps) {
                             <div key={item.id} className="premium-card group hover:scale-[1.02] transition-all duration-500 overflow-hidden">
                                 {item.image_url && (
                                     <div className="h-48 overflow-hidden relative">
-                                        <img
+                                        <Image
                                             src={item.image_url}
                                             alt={item.name}
-                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
+                                            fill
+                                            className="object-cover group-hover:scale-110 transition-transform duration-1000"
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                                     </div>

@@ -1,5 +1,6 @@
 import { createClient } from '@/utils/supabase/server'
 import { OrderActions } from './orders/OrderActions'
+import Image from 'next/image'
 
 export default async function DashboardPage() {
     const supabase = await createClient()
@@ -82,10 +83,11 @@ export default async function DashboardPage() {
                     <div className="relative group">
                         <div className="absolute -inset-1 bg-gradient-to-tr from-primary to-orange-300 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
                         <div className="relative w-16 h-16 bg-white rounded-2xl p-1 shadow-sm overflow-hidden">
-                            <img
+                            <Image
                                 src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=200&auto=format&fit=crop"
                                 alt="Restaurant"
-                                className="w-full h-full object-cover rounded-xl"
+                                fill
+                                className="object-cover rounded-xl"
                             />
                             <div className="absolute bottom-1 right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full flex items-center justify-center">
                                 <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
@@ -214,7 +216,7 @@ export default async function DashboardPage() {
                                         <h3 className="text-2xl font-black text-slate-900 tracking-tight mb-6">{order.customer_name}</h3>
 
                                         <div className="space-y-4">
-                                            {order.order_items.map((item: any) => (
+                                            {order.order_items.map((item: OrderItem) => (
                                                 <div key={item.id} className="flex items-center gap-4">
                                                     <div className="w-10 h-10 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-center text-[11px] font-black text-slate-400">
                                                         {item.quantity}x
