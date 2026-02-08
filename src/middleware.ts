@@ -1,8 +1,29 @@
-import { type NextRequest } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
 import { updateSession } from '@/utils/supabase/middleware'
+import { createClient } from '@/utils/supabase/server'
 
 export async function middleware(request: NextRequest) {
-    return await updateSession(request)
+    // Standard session update for Supabase
+    const response = await updateSession(request)
+
+    // Protection logic
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    const isDashboard = request.nextUrl.pathname.startsWith('/dashboard')
+    const isAdmin = request.nextUrl.pathname.startsWith('/admin')
+
+    // If accessing protected routes without being logged in
+    if ((isDashboard || isAdmin) && !user) {
+        return NextResponse.redirect(new URL('/login', request.url))
+    }
+
+    // Role-based protection for Admin
+    if (isAdmin && user?.email !== 'baldealfa067@gmail.com') {
+        return NextResponse.redirect(new URL('/', request.url))
+    }
+
+    return response
 }
 
 export const config = {

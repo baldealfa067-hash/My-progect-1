@@ -2,64 +2,76 @@ import { login } from '../auth/actions'
 
 export default function LoginPage() {
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
-            <div className="w-full max-w-md space-y-8 rounded-lg bg-white p-6 shadow-md">
-                <div className="text-center">
-                    <h2 className="text-3xl font-bold tracking-tight text-gray-900">
-                        BissauFood
-                    </h2>
-                    <p className="mt-2 text-sm text-gray-600">
-                        Entre na sua conta de restaurante
-                    </p>
-                </div>
-                <form className="mt-8 space-y-6">
-                    <div className="-space-y-px rounded-md shadow-sm">
-                        <div>
-                            <label htmlFor="email-address" className="sr-only">
-                                Email
-                            </label>
-                            <input
-                                id="email-address"
-                                name="email"
-                                type="email"
-                                autoComplete="email"
-                                required
-                                className="relative block w-full rounded-t-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-2"
-                                placeholder="Endereço de email"
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="password" className="sr-only">
-                                Senha
-                            </label>
-                            <input
-                                id="password"
-                                name="password"
-                                type="password"
-                                autoComplete="current-password"
-                                required
-                                className="relative block w-full rounded-b-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-2"
-                                placeholder="Senha"
-                            />
-                        </div>
-                    </div>
+        <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-6 relative overflow-hidden">
+            {/* Background Glows */}
+            <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
+                <div className="absolute top-1/4 -right-1/4 w-[50rem] h-[50rem] bg-primary/5 rounded-full blur-[120px]"></div>
+                <div className="absolute bottom-1/4 -left-1/4 w-[50rem] h-[50rem] bg-primary/5 rounded-full blur-[120px]"></div>
+            </div>
 
-                    <div>
-                        <button
-                            formAction={login}
-                            className="group relative flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                        >
-                            Entrar
-                        </button>
+            <div className="w-full max-w-lg animate-in fade-in zoom-in-95 duration-700 relative z-10">
+                <div className="premium-card p-1 overflow-hidden">
+                    <div className="p-10 lg:p-14 space-y-12 bg-white/0.5">
+                        <div className="text-center space-y-4">
+                            <div className="w-20 h-20 bg-primary rounded-[2rem] flex items-center justify-center mx-auto shadow-glow group hover:scale-110 transition-transform duration-500">
+                                <span className="text-white font-black text-4xl">B</span>
+                            </div>
+                            <div>
+                                <h2 className="text-4xl font-black tracking-tighter uppercase mb-2">Bem-vindo</h2>
+                                <p className="text-[10px] font-black text-secondary uppercase tracking-[0.3em] opacity-40">Acesse sua casa BissauFood</p>
+                            </div>
+                        </div>
+
+                        <form className="space-y-8">
+                            <div className="space-y-6">
+                                <div className="space-y-3">
+                                    <label htmlFor="email-address" className="text-[10px] font-black text-secondary tracking-[0.2em] uppercase opacity-50 ml-1">
+                                        Identificação de Acesso
+                                    </label>
+                                    <input
+                                        id="email-address"
+                                        name="email"
+                                        type="email"
+                                        autoComplete="email"
+                                        required
+                                        className="w-full px-6 py-4 glass rounded-2xl text-sm font-bold placeholder:text-secondary/30 focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all font-sans"
+                                        placeholder="seu@email.com"
+                                    />
+                                </div>
+
+                                <div className="space-y-3">
+                                    <label htmlFor="password" className="text-[10px] font-black text-secondary tracking-[0.2em] uppercase opacity-50 ml-1">
+                                        Chave de Segurança
+                                    </label>
+                                    <input
+                                        id="password"
+                                        name="password"
+                                        type="password"
+                                        autoComplete="current-password"
+                                        required
+                                        className="w-full px-6 py-4 glass rounded-2xl text-sm font-bold placeholder:text-secondary/30 focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all"
+                                        placeholder="••••••••"
+                                    />
+                                </div>
+                            </div>
+
+                            <button
+                                formAction={login}
+                                className="w-full py-5 bg-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] shadow-glow hover:scale-[1.02] active:scale-[0.98] transition-all"
+                            >
+                                Iniciar Sessão
+                            </button>
+                        </form>
+
+                        <div className="text-center pt-6 border-t border-border/5">
+                            <a
+                                href="/register"
+                                className="text-[10px] font-black text-secondary hover:text-white uppercase tracking-[0.2em] transition-all"
+                            >
+                                Novo por aqui? <span className="text-primary italic">Cadastre seu restaurante</span>
+                            </a>
+                        </div>
                     </div>
-                </form>
-                <div className="text-center text-sm">
-                    <a
-                        href="/register"
-                        className="font-medium text-indigo-600 hover:text-indigo-500"
-                    >
-                        Não tem uma conta? Cadastre-se
-                    </a>
                 </div>
             </div>
         </div>

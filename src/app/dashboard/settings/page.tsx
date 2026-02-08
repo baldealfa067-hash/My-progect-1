@@ -51,64 +51,96 @@ export default async function SettingsPage() {
     }
 
     return (
-        <div className="max-w-2xl">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Configurações do Restaurante</h2>
+        <div className="max-w-4xl space-y-12 animate-in fade-in duration-700">
+            {/* Page Header */}
+            <div>
+                <h1 className="text-4xl font-black text-foreground tracking-tighter mb-2">Configurações da Loja</h1>
+                <div className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-primary rounded-full"></span>
+                    <p className="text-[10px] font-bold text-secondary uppercase tracking-widest opacity-50">Identidade e Presença Digital</p>
+                </div>
+            </div>
 
-            <div className="bg-white shadow rounded-lg p-6">
-                <form action={updateRestaurant} className="space-y-6">
-                    <div>
-                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                            Nome do Restaurante
-                        </label>
-                        <input
-                            type="text"
-                            name="name"
-                            id="name"
-                            defaultValue={restaurant?.name || ''}
-                            required
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border"
-                        />
-                    </div>
+            <div className="max-w-3xl">
+                <form action={updateRestaurant} className="space-y-8">
+                    <div className="premium-card p-1 overflow-hidden">
+                        <div className="p-10 lg:p-12 space-y-12 bg-white/0.5">
+                            {/* Section: Basic Info */}
+                            <div className="space-y-10">
+                                <div className="flex items-center gap-5">
+                                    <div className="w-14 h-14 glass rounded-2xl flex items-center justify-center text-primary shadow-glow">
+                                        <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 className="text-2xl font-black text-foreground tracking-tighter">Perfil Comercial</h3>
+                                        <p className="text-[10px] font-bold text-secondary uppercase tracking-widest opacity-40">Como os clientes verão você</p>
+                                    </div>
+                                </div>
 
-                    <div>
-                        <label htmlFor="slug" className="block text-sm font-medium text-gray-700">
-                            Slug (URL amigável)
-                        </label>
-                        <div className="mt-1 flex rounded-md shadow-sm">
-                            <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-gray-500 sm:text-sm">
-                                bissaufood.com/
-                            </span>
-                            <input
-                                type="text"
-                                name="slug"
-                                id="slug"
-                                defaultValue={restaurant?.slug || ''}
-                                required
-                                className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border"
-                            />
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div className="space-y-3">
+                                        <label htmlFor="name" className="text-[10px] font-black text-secondary tracking-[0.2em] uppercase opacity-50 ml-1">
+                                            Nome da Marca
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="name"
+                                            id="name"
+                                            defaultValue={restaurant?.name || ''}
+                                            required
+                                            className="w-full px-6 py-4 glass rounded-2xl text-sm font-bold placeholder:text-secondary/30 focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all"
+                                            placeholder="Ex: Sabores da Guiné"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-3">
+                                        <label htmlFor="slug" className="text-[10px] font-black text-secondary tracking-[0.2em] uppercase opacity-50 ml-1">
+                                            Identificador da URL
+                                        </label>
+                                        <div className="relative">
+                                            <input
+                                                type="text"
+                                                name="slug"
+                                                id="slug"
+                                                defaultValue={restaurant?.slug || ''}
+                                                required
+                                                className="w-full px-6 py-4 glass rounded-2xl text-sm font-bold placeholder:text-secondary/30 focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all lowercase"
+                                                placeholder="ex: sabores-da-guine"
+                                            />
+                                            <div className="absolute left-6 top-1/2 -translate-y-1/2 text-secondary/40 hidden lg:block">
+                                                {/* Optional: Add a prefix like bissaufood.com/ */}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-3">
+                                    <label htmlFor="description" className="text-[10px] font-black text-secondary tracking-[0.2em] uppercase opacity-50 ml-1">
+                                        Bio do Restaurante
+                                    </label>
+                                    <textarea
+                                        name="description"
+                                        id="description"
+                                        rows={4}
+                                        defaultValue={restaurant?.description || ''}
+                                        className="w-full px-6 py-4 glass rounded-2xl text-sm font-bold placeholder:text-secondary/30 focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all resize-none leading-relaxed"
+                                        placeholder="Conte a história da sua cozinha e encante seus clientes..."
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Section: Save */}
+                            <div className="pt-10 border-t border-border/5 flex justify-end">
+                                <button
+                                    type="submit"
+                                    className="px-12 py-4 bg-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-glow hover:scale-105 transition-all"
+                                >
+                                    Atualizar Identidade
+                                </button>
+                            </div>
                         </div>
-                    </div>
-
-                    <div>
-                        <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-                            Descrição
-                        </label>
-                        <textarea
-                            name="description"
-                            id="description"
-                            rows={3}
-                            defaultValue={restaurant?.description || ''}
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border"
-                        />
-                    </div>
-
-                    <div className="flex justify-end">
-                        <button
-                            type="submit"
-                            className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                        >
-                            Salvar Alterações
-                        </button>
                     </div>
                 </form>
             </div>

@@ -1,8 +1,9 @@
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
+import Link from 'next/link'
 
-export default async function NewMenuItemPage() {
+export default async function EditMenuItemPage({ params }: { params: { id: string } }) {
     const supabase = await createClient()
     const {
         data: { user },
@@ -10,17 +11,29 @@ export default async function NewMenuItemPage() {
 
     if (!user) return null
 
+    // Get item
+    const { data: item } = await supabase
+        .from('menu_items')
+        .select('*')
+        .eq('id', params.id)
+        .single()
+
+    if (!item) {
+        redirect('/dashboard/menu')
+    }
+
+    // Verify ownership
     const { data: restaurant } = await supabase
         .from('restaurants')
         .select('id')
         .eq('user_id', user.id)
         .single()
 
-    if (!restaurant) {
-        redirect('/dashboard/settings')
+    if (!restaurant || item.restaurant_id !== restaurant.id) {
+        redirect('/dashboard/menu')
     }
 
-    async function createMenuItem(formData: FormData) {
+    async function updateMenuItem(formData: FormData) {
         'use server'
 
         const supabase = await createClient()
@@ -29,16 +42,15 @@ export default async function NewMenuItemPage() {
         const price = parseFloat(formData.get('price') as string)
         const imageUrl = formData.get('image_url') as string
 
-        if (!restaurant) return
-
-        await supabase.from('menu_items').insert({
-            restaurant_id: restaurant.id,
-            name,
-            description,
-            price,
-            image_url: imageUrl,
-            is_available: true
-        })
+        await supabase
+            .from('menu_items')
+            .update({
+                name,
+                description,
+                price,
+                image_url: imageUrl,
+            })
+            .eq('id', params.id)
 
         revalidatePath('/dashboard/menu')
         redirect('/dashboard/menu')
@@ -48,15 +60,15 @@ export default async function NewMenuItemPage() {
         <div className="max-w-3xl space-y-10 animate-in fade-in slide-in-from-bottom-6 duration-1000">
             {/* Page Header */}
             <div>
-                <h1 className="text-4xl font-black text-foreground tracking-tighter mb-2">Novo Item</h1>
+                <h1 className="text-4xl font-black text-foreground tracking-tighter mb-2">Editar Item</h1>
                 <div className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 bg-primary rounded-full"></span>
-                    <p className="text-[10px] font-bold text-secondary uppercase tracking-widest opacity-50">Explosão de Sabores no Cardápio</p>
+                    <p className="text-[10px] font-bold text-secondary uppercase tracking-widest opacity-50">Refinando a Excelência do seu Cardápio</p>
                 </div>
             </div>
 
             <div className="premium-card p-1 overflow-hidden">
-                <form action={createMenuItem} className="p-8 lg:p-12 space-y-10 bg-white/0.5">
+                <form action={updateMenuItem} className="p-8 lg:p-12 space-y-10 bg-white/0.5">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                         <div className="space-y-8">
                             <div className="space-y-3">
@@ -68,8 +80,9 @@ export default async function NewMenuItemPage() {
                                     name="name"
                                     id="name"
                                     required
+                                    defaultValue={item.name}
                                     placeholder="Ex: Pizza de Muzamba"
-                                    className="w-full px-6 py-4 glass rounded-2xl text-sm font-bold placeholder:text-secondary/30 focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all"
+                                    className="w-full px-6 py-4 glass rounded-2xl text-sm font-bold placeholder:text-secondary/30 focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all font-sans"
                                 />
                             </div>
 
@@ -84,6 +97,7 @@ export default async function NewMenuItemPage() {
                                     required
                                     min="0"
                                     step="1"
+                                    defaultValue={item.price}
                                     placeholder="0"
                                     className="w-full px-6 py-4 glass rounded-2xl text-sm font-bold placeholder:text-secondary/30 focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all font-mono"
                                 />
@@ -98,8 +112,9 @@ export default async function NewMenuItemPage() {
                                 name="description"
                                 id="description"
                                 rows={6}
+                                defaultValue={item.description}
                                 placeholder="Conte a história deste prato..."
-                                className="w-full px-6 py-4 glass rounded-2xl text-sm font-bold placeholder:text-secondary/30 focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all resize-none leading-relaxed"
+                                className="w-full px-6 py-4 glass rounded-2xl text-sm font-bold placeholder:text-secondary/30 focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all resize-none leading-relaxed font-sans"
                             />
                         </div>
                     </div>
@@ -113,6 +128,7 @@ export default async function NewMenuItemPage() {
                                 type="url"
                                 name="image_url"
                                 id="image_url"
+                                defaultValue={item.image_url}
                                 placeholder="https://exemplo.com/item.jpg"
                                 className="w-full pl-16 pr-6 py-4 glass rounded-2xl text-sm font-bold placeholder:text-secondary/30 focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all font-mono"
                             />
@@ -135,7 +151,7 @@ export default async function NewMenuItemPage() {
                             type="submit"
                             className="px-12 py-4 bg-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-glow hover:scale-105 transition-all"
                         >
-                            Criar Prato Premium
+                            Salvar Alterações
                         </button>
                     </div>
                 </form>

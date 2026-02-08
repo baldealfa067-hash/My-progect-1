@@ -1,17 +1,31 @@
 @import "tailwindcss";
 
 :root {
-  --background: #FDFCF9;
-  --foreground: #1A1A1A;
+  /* Core Colors - Premium Palette */
+  --background: #0F1115;
+  /* Deep Charcoal */
+  --foreground: #F8FAFC;
+
   --primary: #FF6B35;
-  --primary-hover: #E85A2A;
-  --secondary: #64748B;
-  --accent: #FFD2C2;
-  --card: #FFFFFF;
-  --border: #E5E7EB;
-  --radius-sm: 0.5rem;
-  --radius-md: 1rem;
-  --radius-lg: 1.5rem;
+  /* Signature Orange */
+  --primary-glow: rgba(255, 107, 53, 0.3);
+  --primary-hover: #FA5D1F;
+
+  --secondary: #94A3B8;
+  --accent: #1E293B;
+
+  --card: rgba(30, 41, 59, 0.7);
+  --card-border: rgba(255, 255, 255, 0.1);
+
+  --border: rgba(255, 255, 255, 0.08);
+
+  --radius-sm: 0.75rem;
+  --radius-md: 1.25rem;
+  --radius-lg: 2rem;
+
+  /* Glassmorphism */
+  --glass-bg: rgba(15, 17, 21, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.1);
 }
 
 @theme inline {
@@ -25,6 +39,9 @@
   --color-border: var(--border);
   --font-sans: var(--font-outfit), var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --shadow-premium: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 20px var(--primary-glow);
 }
 
 body {
@@ -33,10 +50,49 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image:
+    radial-gradient(circle at 0% 0%, rgba(255, 107, 53, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 100% 100%, rgba(255, 107, 53, 0.05) 0%, transparent 50%);
+  background-attachment: fixed;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  color: #111827;
-  font-weight: 700;
-  letter-spacing: -0.025em;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #F8FAFC;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+/* Glassmorphism Utility */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+}
+
+.premium-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.premium-card:hover {
+  border-color: rgba(255, 107, 53, 0.3);
+  box-shadow: var(--shadow-premium);
+  transform: translateY(-4px);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

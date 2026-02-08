@@ -3,110 +3,104 @@ import Image from 'next/image'
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col pt-6">
-      {/* Navigation */}
-      <nav className="max-w-7xl mx-auto w-full px-6 flex justify-between items-center h-16">
-        <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
-            <svg viewBox="0 0 24 24" className="w-6 h-6 text-white" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-              <polyline points="9 22 9 12 15 12 15 22" />
-            </svg>
+    <div className="min-h-screen bg-background text-foreground selection:bg-primary/30 selection:text-white overflow-x-hidden">
+      {/* Navigation Header */}
+      <header className="fixed top-0 left-0 right-0 z-[100] h-24 flex items-center px-6 lg:px-12 glass border-b-0">
+        <div className="container mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center shadow-glow">
+              <span className="text-white font-black text-2xl">B</span>
+            </div>
+            <span className="text-2xl font-black tracking-tighter uppercase whitespace-nowrap hidden sm:block">BissauFood</span>
           </div>
-          <span className="text-2xl font-bold tracking-tight text-foreground">BISSAUFOOD</span>
-        </div>
-        <div className="flex items-center gap-6">
-          <Link href="/admin" className="text-sm font-medium text-secondary hover:text-primary transition-colors">Admin</Link>
-          <Link href="/login" className="px-6 py-2.5 bg-primary text-white rounded-xl font-semibold shadow-lg shadow-primary/25 hover:bg-primary-hover hover:-translate-y-0.5 transition-all duration-200">
-            Entrar
-          </Link>
-        </div>
-      </nav>
 
-      <main className="flex-grow">
+          <div className="flex items-center gap-6">
+            <Link href="/login" className="text-sm font-black uppercase tracking-widest text-secondary hover:text-white transition-all">Entrar</Link>
+            <Link href="/register" className="px-8 py-4 bg-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-glow hover:scale-105 transition-all">Criar Conta</Link>
+          </div>
+        </div>
+      </header>
+
+      <main className="pt-24">
         {/* Hero Section */}
-        <section className="max-w-7xl mx-auto px-6 py-12 lg:py-24 grid lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-8 max-w-xl">
-            <h1 className="text-5xl lg:text-7xl font-extrabold leading-[1.1] text-foreground">
-              Transforme seu <span className="text-primary">Restaurante</span> em Digital
-            </h1>
-            <p className="text-lg text-secondary leading-relaxed">
-              Simplifique a gestão do seu negócio com nosso cardápio digital QR Code, sistema de pedidos em tempo real e controle total das suas vendas.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Link href="/register" className="px-8 py-4 bg-primary text-white rounded-2xl font-bold text-lg shadow-xl shadow-primary/30 hover:bg-primary-hover hover:-translate-y-1 hover:shadow-2xl transition-all duration-300">
-                Começar Agora →
-              </Link>
-              <button className="px-8 py-4 bg-white text-secondary border border-border rounded-2xl font-bold text-lg hover:bg-gray-50 transition-colors">
-                Ver Demo
-              </button>
-            </div>
-            {/* Social proof or badge */}
-            <div className="flex items-center gap-3 p-3 bg-white border border-border rounded-2xl w-fit shadow-sm">
-              <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
-                <svg className="w-5 h-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <div className="text-sm">
-                <p className="font-bold text-foreground">Novo Pedido</p>
-                <p className="text-secondary tracking-tight">Mesa 5 • 3.500 CFA</p>
-              </div>
-            </div>
-          </div>
+        <section className="relative min-h-[90vh] flex items-center pt-24 pb-32">
+          {/* Background Decorative Elements */}
+          <div className="absolute top-1/4 -right-1/4 w-[60rem] h-[60rem] bg-primary/5 rounded-full blur-[120px] pointer-events-none"></div>
+          <div className="absolute bottom-1/4 -left-1/4 w-[60rem] h-[60rem] bg-primary/5 rounded-full blur-[120px] pointer-events-none"></div>
 
-          <div className="relative group">
-            <div className="absolute -inset-4 bg-gradient-to-tr from-primary/20 to-accent/20 rounded-[3rem] blur-2xl group-hover:blur-3xl transition-all duration-500 opacity-60"></div>
-            <div className="relative rounded-[2.5rem] overflow-hidden border-8 border-white shadow-2xl transform lg:rotate-2 hover:rotate-0 transition-transform duration-700">
-              <Image
-                src="/restaurant_hero_image_1770484153908.png"
-                alt="Restaurante Moderno"
-                width={800}
-                height={600}
-                className="w-full h-full object-cover"
-                priority
-              />
-            </div>
-          </div>
-        </section>
-
-        {/* Features Section */}
-        <section className="bg-white py-24 border-t border-border">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="text-center mb-16">
-              <p className="text-primary font-bold tracking-widest uppercase text-sm mb-3">Vantagens</p>
-              <h2 className="text-3xl lg:text-4xl font-extrabold text-foreground">Tudo que você precisa para modernizar seu restaurante</h2>
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[
-                { title: 'Cardápio Digital com QR Code', desc: 'Clientes escaneiam e veem o menu completo no celular, sem necessidade de aplicativos.', icon: 'M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z', color: 'orange' },
-                { title: 'Sistema de Pedidos', desc: 'Receba pedidos em tempo real direto no painel da cozinha, eliminando erros de comunicação.', icon: 'M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z', color: 'green' },
-                { title: 'Painel de Controle', desc: 'Gerencie menu, pedidos, mesas e relatórios em um só lugar de forma intuitiva.', icon: 'M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z', color: 'blue' },
-                { title: 'Relatórios Simples', desc: 'Acompanhe vendas e pedidos do dia para tomar melhores decisões para seu negócio.', icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z', color: 'purple' },
-                { title: '100% Mobile', desc: 'Funciona perfeitamente em qualquer dispositivo: tablets, celulares e computadores.', icon: 'M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z', color: 'teal' },
-                { title: 'Tempo Real', desc: 'Atualizações instantâneas de novos pedidos e mudanças de status na cozinha.', icon: 'M13 10V3L4 14h7v7l9-11h-7z', color: 'pink' }
-              ].map((feature) => (
-                <div key={feature.title} className="p-8 rounded-3xl bg-background border border-border hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 group">
-                  <div className={`w-12 h-12 rounded-2xl bg-white flex items-center justify-center mb-6 shadow-sm border border-border group-hover:scale-110 transition-transform duration-300`}>
-                    <svg className={`w-6 h-6`} fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: feature.color }}>
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={feature.icon} />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-bold mb-3 text-foreground">{feature.title}</h3>
-                  <p className="text-secondary leading-relaxed">{feature.desc}</p>
+          <div className="container mx-auto px-6 lg:px-12 relative z-10">
+            <div className="flex flex-col lg:flex-row items-center gap-20 lg:gap-32">
+              <div className="flex-1 space-y-12 text-center lg:text-left">
+                <div className="inline-flex items-center gap-3 px-4 py-2 glass rounded-2xl animate-in slide-in-from-top-4 duration-1000">
+                  <span className="w-2 h-2 bg-primary rounded-full animate-pulse shadow-glow"></span>
+                  <span className="text-[10px] font-black text-secondary tracking-[0.2em] uppercase">O Futuro dos Pedidos chegou</span>
                 </div>
-              ))}
+
+                <div className="space-y-6">
+                  <h1 className="text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] animate-in slide-in-from-left-8 duration-700">
+                    Sua Comida <br />
+                    <span className="text-primary">Favorita.</span>
+                  </h1>
+                  <p className="text-xl text-secondary/60 max-w-xl font-medium leading-relaxed animate-in slide-in-from-left-8 delay-100 duration-700 mx-auto lg:mx-0">
+                    Experimente a nova forma de descobrir e pedir sabores únicos em Bissau. Rápido, seguro e absolutamente premium.
+                  </p>
+                </div>
+
+                <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-8 pt-8 animate-in slide-in-from-bottom-8 delay-200 duration-700">
+                  <Link
+                    href="/register"
+                    className="w-full sm:w-auto px-12 py-6 bg-primary text-white rounded-2xl text-xs font-black uppercase tracking-[0.2em] shadow-glow hover:scale-105 transition-all text-center"
+                  >
+                    Começar Agora
+                  </Link>
+                  <Link
+                    href="/dashboard"
+                    className="w-full sm:w-auto px-12 py-6 glass text-secondary hover:text-white rounded-2xl text-xs font-black uppercase tracking-[0.2em] hover:bg-white/5 transition-all text-center"
+                  >
+                    Ver Demo
+                  </Link>
+                </div>
+              </div>
+
+              <div className="flex-1 relative animate-in zoom-in-95 delay-300 duration-1000">
+                <div className="relative aspect-[4/5] rounded-[4rem] overflow-hidden shadow-2xl border-[12px] border-white/5 group">
+                  <Image
+                    src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80"
+                    alt="Delicious Food"
+                    fill
+                    className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                    priority
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-60"></div>
+                  <div className="absolute bottom-16 left-16 right-16">
+                    <p className="text-[10px] font-black text-primary tracking-[0.3em] uppercase mb-4">Top Rated</p>
+                    <h3 className="text-4xl font-black tracking-tighter text-white">Sabores de Quintal</h3>
+                  </div>
+                </div>
+
+                {/* Floating Stat Card */}
+                <div className="absolute -bottom-10 -left-10 lg:-left-20 glass p-8 rounded-[2.5rem] shadow-2xl border border-white/10 hidden sm:block animate-float">
+                  <div className="flex items-center gap-6">
+                    <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary shadow-glow">
+                      <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-black text-secondary tracking-widest uppercase opacity-40">Velocidade</p>
+                      <p className="text-2xl font-black tracking-tighter">Under 25m</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-border py-12 bg-background">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <p className="text-secondary text-sm">© 2026 BissauFood. Todos os direitos reservados.</p>
-        </div>
+      {/* Subtle Footer */}
+      <footer className="py-12 border-t border-border/10 text-center">
+        <p className="text-[10px] font-black tracking-[0.3em] text-secondary opacity-30 uppercase">© 2026 BissauFood Premium Experience</p>
       </footer>
     </div>
   )
