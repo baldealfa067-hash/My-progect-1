@@ -16,7 +16,6 @@ export default async function NewPartnerPage() {
         const name = formData.get('name') as string
         const slug = formData.get('slug') as string
         const description = formData.get('description') as string
-        const user_email = formData.get('user_email') as string
 
         // Note: In a real app, you'd create an auth user first or link to an existing user
         // For this MVP demonstration, we assume we want to link it to a specific user_id
