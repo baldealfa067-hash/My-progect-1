@@ -3,8 +3,19 @@
 import { updateOrderStatus } from './actions'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { getWhatsAppLink } from '@/utils/notifications'
 
-export function OrderActions({ orderId, status }: { orderId: string, status: string }) {
+export function OrderActions({
+    orderId,
+    status,
+    customerName,
+    customerPhone
+}: {
+    orderId: string,
+    status: string,
+    customerName: string,
+    customerPhone: string
+}) {
     const router = useRouter()
     const [loading, setLoading] = useState(false)
 
@@ -12,6 +23,11 @@ export function OrderActions({ orderId, status }: { orderId: string, status: str
         setLoading(true)
         try {
             await updateOrderStatus(orderId, newStatus)
+
+            // Generate and open WhatsApp link for communication
+            const waLink = getWhatsAppLink(customerPhone, customerName, newStatus, orderId)
+            window.open(waLink, '_blank')
+
             router.refresh()
         } catch (error) {
             console.error('Failed to update order:', error)

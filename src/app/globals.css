@@ -26,6 +26,11 @@
   /* Glassmorphism */
   --glass-bg: rgba(15, 17, 21, 0.8);
   --glass-border: rgba(255, 255, 255, 0.1);
+
+  /* Cultural Colors - Guinea-Bissau Flag */
+  --flag-red: #CE1126;
+  --flag-yellow: #FCD116;
+  --flag-green: #009E49;
 }
 
 @theme inline {
@@ -39,6 +44,10 @@
   --color-border: var(--border);
   --font-sans: var(--font-outfit), var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --color-flag-red: var(--flag-red);
+  --color-flag-yellow: var(--flag-yellow);
+  --color-flag-green: var(--flag-green);
 
   --shadow-premium: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
   --shadow-glow: 0 0 20px var(--primary-glow);
@@ -95,4 +104,25 @@ h6 {
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+.cultural-border {
+  position: relative;
+  overflow: hidden;
+}
+
+.cultural-border::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(to right,
+      var(--flag-red) 33.33%,
+      var(--flag-yellow) 33.33%,
+      var(--flag-yellow) 66.66%,
+      var(--flag-green) 66.66%);
+  opacity: 0.7;
+  z-index: 10;
 }

@@ -13,6 +13,8 @@ export const metadata: Metadata = {
   description: "A plataforma completa para gestão de restaurantes na Guiné-Bissau. Cardápio digital, gestão de pedidos e relatórios em tempo real.",
 };
 
+import { CartProvider } from "@/components/CartContext";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -23,7 +25,9 @@ export default function RootLayout({
       <body
         className={`${outfit.variable} font-sans antialiased`}
       >
-        {children}
+        <CartProvider>
+          {children}
+        </CartProvider>
       </body>
     </html>
   );

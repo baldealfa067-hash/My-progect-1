@@ -91,7 +91,7 @@ export default async function OrdersPage() {
             ) : (
                 <div className="grid grid-cols-1 gap-6">
                     {orders.map((order) => (
-                        <div key={order.id} className="premium-card p-1 overflow-hidden group">
+                        <div key={order.id} className="premium-card p-1 overflow-hidden group cultural-border">
                             <div className="p-8 lg:p-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8 relative z-10 bg-white/0.5">
                                 <div className="flex items-start gap-8">
                                     <div className="w-20 h-20 bg-background border border-border/10 rounded-3xl flex items-center justify-center shadow-lg text-primary group-hover:scale-105 transition-all duration-500">
@@ -147,7 +147,12 @@ export default async function OrdersPage() {
                                         </p>
                                     </div>
                                     <div className="scale-110 origin-right transition-transform group-hover:scale-[1.15]">
-                                        <OrderActions orderId={order.id} status={order.status} />
+                                        <OrderActions
+                                            orderId={order.id}
+                                            status={order.status}
+                                            customerName={order.customer_name}
+                                            customerPhone={order.customer_phone}
+                                        />
                                     </div>
                                 </div>
                             </div>
