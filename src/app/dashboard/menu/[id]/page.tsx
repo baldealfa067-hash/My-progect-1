@@ -3,7 +3,12 @@ import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import Link from 'next/link'
 
-export default async function EditMenuItemPage({ params }: { params: { id: string } }) {
+export default async function EditMenuItemPage({
+    params
+}: {
+    params: Promise<{ id: string }>
+}) {
+    const { id } = await params
     const supabase = await createClient()
     const {
         data: { user },
@@ -15,7 +20,7 @@ export default async function EditMenuItemPage({ params }: { params: { id: strin
     const { data: item } = await supabase
         .from('menu_items')
         .select('*')
-        .eq('id', params.id)
+        .eq('id', id)
         .single()
 
     if (!item) {
@@ -50,7 +55,7 @@ export default async function EditMenuItemPage({ params }: { params: { id: strin
                 price,
                 image_url: imageUrl,
             })
-            .eq('id', params.id)
+            .eq('id', id)
 
         revalidatePath('/dashboard/menu')
         redirect('/dashboard/menu')

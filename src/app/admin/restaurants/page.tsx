@@ -48,7 +48,7 @@ export default async function AdminRestaurantsPage() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border/5">
-                            {restaurants?.map((restaurant: { id: string, name: string, slug: string, created_at: string }) => (
+                            {restaurants?.map((restaurant: { id: string, name: string, slug: string, description: string | null, created_at: string }) => (
                                 <tr key={restaurant.id} className="group hover:bg-white/1 transition-all">
                                     <td className="px-8 py-6">
                                         <div className="flex items-center gap-4">
