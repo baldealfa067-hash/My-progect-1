@@ -1,5 +1,4 @@
 import { createClient } from '@/utils/supabase/server'
-import { OrderActions } from './orders/OrderActions'
 import Image from 'next/image'
 import { OrdersListing } from './orders/OrdersListing'
 

@@ -31,13 +31,15 @@ export default async function ReportsPage() {
         .eq('restaurant_id', restaurant?.id)
         .order('created_at', { ascending: false })
 
-    const totalRevenue = orderStats?.reduce((acc: number, order: any) => acc + Number(order.total_amount), 0) || 0
-    const completedOrdersCount = orderStats?.filter((o: any) => o.status === 'completed').length || 0
+    const totalRevenue = orderStats?.reduce((acc: number, order: { total_amount: number }) => acc + Number(order.total_amount), 0) || 0
+    const completedOrdersCount = orderStats?.filter((o: { status: string }) => o.status === 'completed').length || 0
 
     // Top Products Calculation
     const productSales: { [key: string]: number } = {}
     orderStats?.forEach((order: any) => {
+        // @ts-ignore - Supabase nested type complexity
         order.order_items?.forEach((item: any) => {
+            // @ts-ignore
             const name = item.menu_items?.name
             if (name) {
                 productSales[name] = (productSales[name] || 0) + item.quantity

@@ -1,6 +1,5 @@
 import { createClient } from '@/utils/supabase/server'
 import Link from 'next/link'
-import Image from 'next/image'
 import { QRManager } from './QRManager'
 
 export default async function QRCodePage() {

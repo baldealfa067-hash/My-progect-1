@@ -38,7 +38,6 @@ export async function updateSession(request: NextRequest) {
     } = await supabase.auth.getUser()
 
     const url = request.nextUrl.clone()
-    const isLoginPage = url.pathname.startsWith('/login')
     const isRegisterPage = url.pathname.startsWith('/register')
     const isAdminRoute = url.pathname.startsWith('/admin')
     const isDashboardRoute = url.pathname.startsWith('/dashboard')
