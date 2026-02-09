@@ -43,6 +43,9 @@ export function OrdersListing({
                     filter: `restaurant_id=eq.${restaurantId}`
                 },
                 async (payload) => {
+                    const targetId = (payload.new as { id: string })?.id || (payload.old as { id: string })?.id
+                    if (!targetId) return
+
                     // Fetch the full order details including order_items
                     const { data: newOrder } = await supabase
                         .from('orders')
@@ -53,7 +56,7 @@ export function OrdersListing({
                                 menu_items (name)
                             )
                         `)
-                        .eq('id', payload.new.id || payload.old.id)
+                        .eq('id', targetId)
                         .single()
 
                     if (newOrder) {
@@ -121,8 +124,8 @@ export function OrdersListing({
                                         ORD-{order.id.slice(0, 4)}
                                     </p>
                                     <span className={`px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest ${order.status === 'pending' ? 'bg-orange-100 text-orange-600' :
-                                            order.status === 'accepted' ? 'bg-blue-100 text-blue-600' :
-                                                'bg-purple-100 text-purple-600'
+                                        order.status === 'accepted' ? 'bg-blue-100 text-blue-600' :
+                                            'bg-purple-100 text-purple-600'
                                         }`}>
                                         {order.status}
                                     </span>
