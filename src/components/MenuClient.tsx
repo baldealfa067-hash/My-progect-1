@@ -11,6 +11,7 @@ interface MenuItem {
     price: number
     description: string | null
     image_url: string | null
+    category: string | null
 }
 
 interface Restaurant {
@@ -71,40 +72,50 @@ export function MenuClient({ restaurant, menuItems }: MenuClientProps) {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {menuItems?.map((item) => (
-                            <div key={item.id} className="premium-card group hover:scale-[1.02] transition-all duration-500 overflow-hidden">
-                                {item.image_url && (
-                                    <div className="h-48 overflow-hidden relative">
-                                        <Image
-                                            src={item.image_url}
-                                            alt={item.name}
-                                            fill
-                                            className="object-cover group-hover:scale-110 transition-transform duration-1000"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                                    </div>
-                                )}
-                                <div className="p-8 space-y-4">
-                                    <div className="flex justify-between items-start gap-4">
-                                        <h3 className="text-xl font-black tracking-tight leading-tight">{item.name}</h3>
-                                        <span className="text-primary font-black tracking-tighter text-xl">
-                                            {new Intl.NumberFormat('pt-GW', { style: 'currency', currency: 'XOF', maximumFractionDigits: 0 }).format(item.price)}
-                                        </span>
-                                    </div>
-                                    <p className="text-secondary/50 text-xs font-bold leading-relaxed line-clamp-2">
-                                        {item.description}
-                                    </p>
-                                    <button
-                                        onClick={() => addToCart({ id: item.id, name: item.name, price: item.price, quantity: 1 }, restaurant.id)}
-                                        className="w-full py-4 glass rounded-xl text-[10px] font-black uppercase tracking-widest text-secondary hover:text-white hover:bg-primary transition-all shadow-lg border-white/5"
-                                    >
-                                        Adicionar ao Pedido
-                                    </button>
-                                </div>
+                    {/* Grouped Menu */}
+                    {Array.from(new Set(menuItems?.map(i => i.category || 'Outros'))).map(category => (
+                        <div key={category} className="space-y-8">
+                            <div className="flex items-center gap-4">
+                                <h2 className="text-2xl font-black tracking-tight uppercase border-l-4 border-primary pl-4">{category}</h2>
+                                <div className="h-px flex-1 bg-white/5"></div>
                             </div>
-                        ))}
-                    </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                {menuItems?.filter(item => (item.category || 'Outros') === category).map((item) => (
+                                    <div key={item.id} className="premium-card group hover:scale-[1.02] transition-all duration-500 overflow-hidden">
+                                        {item.image_url && (
+                                            <div className="h-48 overflow-hidden relative">
+                                                <Image
+                                                    src={item.image_url}
+                                                    alt={item.name}
+                                                    fill
+                                                    className="object-cover group-hover:scale-110 transition-transform duration-1000"
+                                                />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                                            </div>
+                                        )}
+                                        <div className="p-8 space-y-4">
+                                            <div className="flex justify-between items-start gap-4">
+                                                <h3 className="text-xl font-black tracking-tight leading-tight">{item.name}</h3>
+                                                <span className="text-primary font-black tracking-tighter text-xl">
+                                                    {new Intl.NumberFormat('pt-GW', { style: 'currency', currency: 'XOF', maximumFractionDigits: 0 }).format(item.price)}
+                                                </span>
+                                            </div>
+                                            <p className="text-secondary/50 text-xs font-bold leading-relaxed line-clamp-2">
+                                                {item.description}
+                                            </p>
+                                            <button
+                                                onClick={() => addToCart({ id: item.id, name: item.name, price: item.price, quantity: 1 }, restaurant.id)}
+                                                className="w-full py-4 glass rounded-xl text-[10px] font-black uppercase tracking-widest text-secondary hover:text-white hover:bg-primary transition-all shadow-lg border-white/5"
+                                            >
+                                                Adicionar ao Pedido
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
 
                     {(!menuItems || menuItems.length === 0) && (
                         <div className="text-center py-20 opacity-30">

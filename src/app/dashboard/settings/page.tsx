@@ -34,12 +34,16 @@ export default async function SettingsPage({
         const name = formData.get('name') as string
         const description = formData.get('description') as string
         const slug = formData.get('slug') as string
+        const phone = formData.get('phone') as string
+        const address = formData.get('address') as string
 
         const restaurantData = {
             user_id: user.id,
             name,
             description,
             slug,
+            phone,
+            address,
         }
 
         if (restaurant) {
@@ -168,6 +172,38 @@ export default async function SettingsPage({
                                                 {/* Optional: Add a prefix like bissaufood.com/ */}
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div className="space-y-3">
+                                        <label htmlFor="phone" className="text-[10px] font-black text-secondary tracking-[0.2em] uppercase opacity-50 ml-1">
+                                            WhatsApp de Contato
+                                        </label>
+                                        <input
+                                            type="tel"
+                                            name="phone"
+                                            id="phone"
+                                            defaultValue={restaurant?.phone || ''}
+                                            required
+                                            className="w-full px-6 py-4 glass rounded-2xl text-sm font-bold placeholder:text-secondary/30 focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all font-mono"
+                                            placeholder="+245 9..."
+                                        />
+                                    </div>
+
+                                    <div className="space-y-3">
+                                        <label htmlFor="address" className="text-[10px] font-black text-secondary tracking-[0.2em] uppercase opacity-50 ml-1">
+                                            Endereço Físico
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="address"
+                                            id="address"
+                                            defaultValue={restaurant?.address || ''}
+                                            required
+                                            className="w-full px-6 py-4 glass rounded-2xl text-sm font-bold placeholder:text-secondary/30 focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all"
+                                            placeholder="Ex: Avenida Amílcar Cabral, Bissau"
+                                        />
                                     </div>
                                 </div>
 

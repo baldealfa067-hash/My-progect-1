@@ -46,6 +46,7 @@ export default async function EditMenuItemPage({
         const description = formData.get('description') as string
         const price = parseFloat(formData.get('price') as string)
         const imageUrl = formData.get('image_url') as string
+        const category = formData.get('category') as string
 
         await supabase
             .from('menu_items')
@@ -54,6 +55,7 @@ export default async function EditMenuItemPage({
                 description,
                 price,
                 image_url: imageUrl,
+                category,
             })
             .eq('id', id)
 
@@ -105,8 +107,27 @@ export default async function EditMenuItemPage({
                                     defaultValue={item.price}
                                     placeholder="0"
                                     className="w-full px-6 py-4 glass rounded-2xl text-sm font-bold placeholder:text-secondary/30 focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all font-mono"
-                                />
                             </div>
+                        </div>
+
+                        <div className="space-y-3">
+                            <label htmlFor="category" className="text-[10px] font-black text-secondary tracking-[0.2em] uppercase opacity-50 ml-1">
+                                Categoria
+                            </label>
+                            <select
+                                name="category"
+                                id="category"
+                                required
+                                defaultValue={item.category || ''}
+                                className="w-full px-6 py-4 glass rounded-2xl text-sm font-bold focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all appearance-none bg-transparent"
+                            >
+                                <option value="" disabled className="bg-background">Selecionar...</option>
+                                <option value="Entradas" className="bg-background">Entradas</option>
+                                <option value="Pratos Principais" className="bg-background">Pratos Principais</option>
+                                <option value="Bebidas" className="bg-background">Bebidas</option>
+                                <option value="Sobremesas" className="bg-background">Sobremesas</option>
+                                <option value="Outros" className="bg-background">Outros</option>
+                            </select>
                         </div>
 
                         <div className="space-y-3">

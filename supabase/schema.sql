@@ -5,6 +5,8 @@ create table public.restaurants (
   name text not null,
   slug text not null unique,
   description text,
+  phone text,
+  address text,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   constraint restaurants_pkey primary key (id)

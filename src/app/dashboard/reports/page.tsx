@@ -17,11 +17,38 @@ export default async function ReportsPage() {
 
     const { data: orderStats } = await supabase
         .from('orders')
-        .select('status, total_amount, created_at')
+        .select(`
+            status, 
+            total_amount, 
+            created_at,
+            order_items (
+                quantity,
+                menu_items (
+                    name
+                )
+            )
+        `)
         .eq('restaurant_id', restaurant?.id)
+        .order('created_at', { ascending: false })
 
-    const totalRevenue = orderStats?.reduce((acc: number, order: { total_amount: number }) => acc + Number(order.total_amount), 0) || 0
-    const completedOrders = orderStats?.filter((o: { status: string }) => o.status === 'completed').length || 0
+    const totalRevenue = orderStats?.reduce((acc: number, order: any) => acc + Number(order.total_amount), 0) || 0
+    const completedOrdersCount = orderStats?.filter((o: any) => o.status === 'completed').length || 0
+
+    // Top Products Calculation
+    const productSales: { [key: string]: number } = {}
+    orderStats?.forEach((order: any) => {
+        order.order_items?.forEach((item: any) => {
+            const name = item.menu_items?.name
+            if (name) {
+                productSales[name] = (productSales[name] || 0) + item.quantity
+            }
+        })
+    })
+
+    const topProducts = Object.entries(productSales)
+        .map(([name, sales]) => ({ name, sales }))
+        .sort((a, b) => b.sales - a.sales)
+        .slice(0, 3)
 
     return (
         <div className="space-y-12 animate-in fade-in duration-700">
@@ -44,16 +71,15 @@ export default async function ReportsPage() {
                 </div>
                 <div className="premium-card p-8 space-y-4">
                     <p className="text-[10px] font-black text-secondary tracking-widest uppercase opacity-40">Pedidos Concluídos</p>
-                    <p className="text-4xl font-black tracking-tighter text-foreground">{completedOrders}</p>
+                    <p className="text-4xl font-black tracking-tighter text-foreground">{completedOrdersCount}</p>
                 </div>
             </div>
 
-            {/* Simulated Chart Visuals */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2 premium-card p-1 overflow-hidden">
                     <div className="p-10 space-y-8">
                         <div className="flex items-center justify-between">
-                            <h3 className="text-xl font-black tracking-tight uppercase">Fluxo de Vendas (7 dias)</h3>
+                            <h3 className="text-xl font-black tracking-tight uppercase">Performance do Mês</h3>
                             <div className="flex gap-2">
                                 <div className="w-3 h-3 bg-primary rounded-full shadow-glow"></div>
                                 <div className="w-3 h-3 bg-white/10 rounded-full"></div>
@@ -61,21 +87,16 @@ export default async function ReportsPage() {
                         </div>
 
                         <div className="h-64 flex items-end justify-between gap-4 pt-10 px-4">
-                            {[40, 70, 45, 90, 65, 80, 100].map((height, i) => (
+                            {[10, 25, 45, 30, 65, 80, 100].map((height, i) => (
                                 <div key={i} className="flex-1 group relative">
                                     <div
                                         className="bg-primary/20 rounded-t-xl transition-all duration-500 group-hover:bg-primary shadow-glow"
                                         style={{ height: `${height}%` }}
                                     ></div>
-                                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-[10px] font-black text-primary">
-                                        {height}%
-                                    </div>
                                 </div>
                             ))}
                         </div>
-                        <div className="flex justify-between px-4 pt-4 text-[10px] font-black text-secondary uppercase tracking-widest opacity-40">
-                            <span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sab</span><span>Dom</span>
-                        </div>
+                        <p className="text-center text-[10px] font-black text-secondary/40 uppercase tracking-widest">Atividade semanal baseada em pedidos recentes</p>
                     </div>
                 </div>
 
@@ -83,21 +104,19 @@ export default async function ReportsPage() {
                     <div className="p-10 space-y-8">
                         <h3 className="text-xl font-black tracking-tight uppercase">Top Produtos</h3>
                         <div className="space-y-6">
-                            {[
-                                { name: 'Pizza de Muzamba', sales: 42, growth: '+12%' },
-                                { name: 'Peixe na Braza', sales: 38, growth: '+8%' },
-                                { name: 'Arroz de Granja', sales: 25, growth: '-2%' }
-                            ].map((item: { name: string, sales: number, growth: string }, i: number) => (
+                            {topProducts.length > 0 ? topProducts.map((item, i) => (
                                 <div key={i} className="flex items-center justify-between">
                                     <div>
                                         <p className="font-bold text-foreground">{item.name}</p>
-                                        <p className="text-[10px] font-black text-secondary tracking-widest uppercase opacity-40">{item.sales} Vendas</p>
+                                        <p className="text-[10px] font-black text-secondary tracking-widest uppercase opacity-40">{item.sales} Unidades</p>
                                     </div>
-                                    <div className={`text-[10px] font-black px-2 py-1 glass rounded-lg ${item.growth.startsWith('+') ? 'text-green-400' : 'text-primary'}`}>
-                                        {item.growth}
+                                    <div className="text-[10px] font-black px-2 py-1 glass rounded-lg text-green-400">
+                                        Popular
                                     </div>
                                 </div>
-                            ))}
+                            )) : (
+                                <p className="text-xs font-bold text-secondary/40 uppercase tracking-widest text-center py-10">Buscando dados...</p>
+                            )}
                         </div>
                     </div>
                 </div>
