@@ -1,16 +1,21 @@
 import type { Metadata } from "next";
-import { Outfit } from "next/font/google";
+import { Outfit, Inter } from "next/font/google";
 import "./globals.css";
 
 const outfit = Outfit({
   variable: "--font-outfit",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+});
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "BissauFood - Digitalize seu Restaurante",
-  description: "A plataforma completa para gestão de restaurantes na Guiné-Bissau. Cardápio digital, gestão de pedidos e relatórios em tempo real.",
+  title: "BissauFood | Premium Restaurant Experience",
+  description: "A plataforma nº 1 para digitalização de restaurantes na Guiné-Bissau. Cardápio digital premium, gestão de pedidos e controle total.",
 };
 
 import { CartProvider } from "@/components/CartContext";
@@ -23,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="pt">
       <body
-        className={`${outfit.variable} font-sans antialiased`}
+        className={`${outfit.variable} ${inter.variable} font-inter antialiased`}
       >
         <CartProvider>
           {children}

@@ -8,7 +8,6 @@ export default async function DashboardPage() {
 
     if (!user) return null
 
-    // Get restaurant
     const { data: restaurant } = await supabase
         .from('restaurants')
         .select('*')
@@ -41,7 +40,6 @@ export default async function DashboardPage() {
     let recentOrders: Order[] = []
 
     if (restaurant) {
-        // Fetch stats
         const today = new Date()
         today.setHours(0, 0, 0, 0)
 
@@ -59,7 +57,6 @@ export default async function DashboardPage() {
                 .reduce((acc: number, current: { total_amount: number }) => acc + Number(current.total_amount), 0)
         }
 
-        // Fetch recent orders
         const { data: orders } = await supabase
             .from('orders')
             .select(`
@@ -71,111 +68,91 @@ export default async function DashboardPage() {
             `)
             .eq('restaurant_id', restaurant.id)
             .order('created_at', { ascending: false })
-            .limit(5)
+            .limit(10)
 
-        recentOrders = orders || []
+        recentOrders = (orders || []) as unknown as Order[]
     }
 
     return (
-        <div className="space-y-10 animate-in fade-in duration-700">
-            {/* Top Operational Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <div className="flex items-center gap-5">
-                    <div className="relative group">
-                        <div className="absolute -inset-1 bg-gradient-to-tr from-primary to-orange-300 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-                        <div className="relative w-16 h-16 bg-white rounded-2xl p-1 shadow-sm overflow-hidden">
+        <div className="space-y-12 animate-in fade-in duration-700">
+            {/* Operational Header */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+                <div className="flex items-center gap-6">
+                    <div className="relative">
+                        <div className="w-20 h-20 rounded-[2rem] overflow-hidden border-4 border-white shadow-premium relative group">
                             <Image
                                 src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=200&auto=format&fit=crop"
                                 alt="Restaurant"
                                 fill
-                                className="object-cover rounded-xl"
+                                className="object-cover transition-transform duration-700 group-hover:scale-110"
                             />
-                            <div className="absolute bottom-1 right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full flex items-center justify-center">
-                                <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
-                            </div>
+                        </div>
+                        <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 border-4 border-white rounded-full flex items-center justify-center">
+                            <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
                         </div>
                     </div>
                     <div>
-                        <p className="text-[10px] font-black text-primary tracking-[0.2em] uppercase mb-1">Painel Operacional</p>
-                        <h1 className="text-3xl font-black text-slate-900 tracking-tighter">{restaurant?.name || 'Seu Restaurante'}</h1>
+                        <h1 className="text-4xl font-black text-slate-900 tracking-tighter font-display">{restaurant?.name || 'Sua Operação'}</h1>
+                        <p className="text-sm font-bold text-slate-400 tracking-tight flex items-center gap-2">
+                            <svg className="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Painel Operacional Ativo
+                        </p>
                     </div>
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <div className="px-5 py-2.5 bg-white border border-slate-100 rounded-2xl flex items-center gap-3 shadow-sm">
-                        <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2" />
-                        </svg>
-                        <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest whitespace-nowrap">Tempo Médio: <span className="text-slate-900">18M</span></span>
-                    </div>
-                    <button className="w-12 h-12 bg-[#0F172A] text-white rounded-2xl flex items-center justify-center shadow-lg hover:scale-105 transition-transform relative">
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-                        </svg>
-                        <span className="absolute top-3 right-3 w-2 h-2 bg-primary rounded-full border-2 border-[#0F172A]"></span>
-                    </button>
-                </div>
-            </div>
-
-            {/* Main Stats Row */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* Revenue Card */}
-                <div className="premium-card p-1 items-stretch flex">
-                    <div className="bg-white rounded-[2.2rem] p-8 flex flex-row items-center gap-6 w-full group">
-                        <div className="w-14 h-14 bg-green-50 rounded-2xl flex items-center justify-center text-green-500 group-hover:scale-110 transition-transform">
-                            <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18L9 11.25l4.306 4.307L21.75 8.25" />
+                    <div className="hidden lg:flex px-6 py-3 bg-white border border-slate-100 rounded-2xl flex items-center gap-4 shadow-sm">
+                        <div className="flex flex-col">
+                            <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest leading-none mb-1">Live Status</span>
+                            <span className="text-[11px] font-black text-slate-900 uppercase">Monitorando Pedidos</span>
+                        </div>
+                        <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-primary">
+                            <svg className="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
-                        </div>
-                        <div>
-                            <p className="text-[10px] font-black text-slate-400 tracking-[0.2em] uppercase mb-1">Faturamento</p>
-                            <h3 className="text-2xl font-black text-slate-900 tracking-tight">
-                                {new Intl.NumberFormat('pt-GW', { maximumFractionDigits: 0 }).format(stats.revenue)} CFA
-                            </h3>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Total Orders Card */}
-                <div className="premium-card p-1 items-stretch flex">
-                    <div className="bg-white rounded-[2.2rem] p-8 flex flex-row items-center gap-6 w-full group">
-                        <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-500 group-hover:scale-110 transition-transform">
-                            <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25L3 7.5m18 0v9l-9 5.25L3 16.5v-9" />
-                            </svg>
-                        </div>
-                        <div>
-                            <p className="text-[10px] font-black text-slate-400 tracking-[0.2em] uppercase mb-1">Total Pedidos</p>
-                            <h3 className="text-2xl font-black text-slate-900 tracking-tight">{stats.today}</h3>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Avg Ticket Card */}
-                <div className="premium-card p-1 items-stretch flex">
-                    <div className="bg-white rounded-[2.2rem] p-8 flex flex-row items-center gap-6 w-full group">
-                        <div className="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                            <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <p className="text-[10px] font-black text-slate-400 tracking-[0.2em] uppercase mb-1">Ticket Médio</p>
-                            <h3 className="text-2xl font-black text-slate-900 tracking-tight">
-                                {new Intl.NumberFormat('pt-GW', { maximumFractionDigits: 0 }).format(stats.today > 0 ? stats.revenue / stats.today : 0)} CFA
-                            </h3>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Kitchen Orders Section */}
-            {restaurant && (
-                <OrdersListing
-                    restaurantId={restaurant.id}
-                    initialOrders={JSON.parse(JSON.stringify(recentOrders))}
-                />
-            )}
+            {/* Performance Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {[
+                    { label: 'Receita Hoje', value: `${new Intl.NumberFormat('pt-GW', { maximumFractionDigits: 0 }).format(stats.revenue)} CFA`, icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z', color: 'text-green-600' },
+                    { label: 'Pedidos Ativos', value: `${stats.pending}`, icon: 'M13 10V3L4 14h7v7l9-11h-7z', color: 'text-orange-500' },
+                    { label: 'Ticket Médio', value: `${new Intl.NumberFormat('pt-GW', { maximumFractionDigits: 0 }).format(stats.today > 0 ? stats.revenue / stats.today : 0)} CFA`, icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z', color: 'text-primary' }
+                ].map((stat) => (
+                    <div key={stat.label} className="premium-card p-8 group">
+                        <div className="flex items-center gap-6">
+                            <div className={`w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center ${stat.color} group-hover:bg-primary group-hover:text-white transition-all shadow-sm`}>
+                                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d={stat.icon} />
+                                </svg>
+                            </div>
+                            <div>
+                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">{stat.label}</p>
+                                <h3 className="text-3xl font-black text-slate-900 tracking-tighter">{stat.value}</h3>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Kitchen Orders Interface */}
+            <div className="space-y-8">
+                <div className="flex items-center justify-between">
+                    <h2 className="text-3xl font-black text-slate-900 tracking-tighter">Fila de Produção</h2>
+                </div>
+                {restaurant && (
+                    <OrdersListing
+                        restaurantId={restaurant.id}
+                        initialOrders={JSON.parse(JSON.stringify(recentOrders))}
+                    />
+                )}
+            </div>
         </div>
     )
 }
