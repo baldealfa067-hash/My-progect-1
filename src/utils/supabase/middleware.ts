@@ -37,18 +37,33 @@ export async function updateSession(request: NextRequest) {
         data: { user },
     } = await supabase.auth.getUser()
 
-    if (
-        !user &&
-        !request.nextUrl.pathname.startsWith('/login') &&
-        !request.nextUrl.pathname.startsWith('/register') &&
-        !request.nextUrl.pathname.startsWith('/auth') &&
-        request.nextUrl.pathname.startsWith('/dashboard')
-    ) {
-        // no user, potentially redirect?
-        // for now, we just proceed, but you might want to redirect to login
-        const url = request.nextUrl.clone()
+    const url = request.nextUrl.clone()
+    const isLoginPage = url.pathname.startsWith('/login')
+    const isRegisterPage = url.pathname.startsWith('/register')
+    const isAdminRoute = url.pathname.startsWith('/admin')
+    const isDashboardRoute = url.pathname.startsWith('/dashboard')
+    const ADMIN_EMAIL = 'baldealfa067@gmail.com'
+
+    // 1. Redirect /register to /login (Account creation is Admin-only)
+    if (isRegisterPage) {
         url.pathname = '/login'
         return NextResponse.redirect(url)
+    }
+
+    // 2. Protect Admin Routes
+    if (isAdminRoute) {
+        if (!user || user.email !== ADMIN_EMAIL) {
+            url.pathname = '/login'
+            return NextResponse.redirect(url)
+        }
+    }
+
+    // 3. Protect Dashboard Routes
+    if (isDashboardRoute) {
+        if (!user) {
+            url.pathname = '/login'
+            return NextResponse.redirect(url)
+        }
     }
 
     return supabaseResponse

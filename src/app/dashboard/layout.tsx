@@ -22,7 +22,22 @@ export default function DashboardLayout({
         const checkUser = async () => {
             const supabase = createClient()
             const { data: { user } } = await supabase.auth.getUser()
+
             if (!user) {
+                router.push('/login')
+                return
+            }
+
+            // Check if user has a restaurant
+            const { data: restaurant } = await supabase
+                .from('restaurants')
+                .select('id')
+                .eq('user_id', user.id)
+                .single()
+
+            const ADMIN_EMAIL = 'baldealfa067@gmail.com'
+            if (!restaurant && user.email !== ADMIN_EMAIL) {
+                // If not an admin and has no restaurant, log them out or redirect
                 router.push('/login')
             } else {
                 setUser(user)

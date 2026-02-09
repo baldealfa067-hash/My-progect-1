@@ -15,20 +15,14 @@ export default async function NewPartnerPage() {
         const supabase = await createClient()
         const { data: { user } } = await supabase.auth.getUser()
 
-        if (!user) {
+        if (!user || user.email !== 'baldealfa067@gmail.com') {
             redirect('/login')
         }
 
         const name = formData.get('name') as string
         const slug = formData.get('slug') as string
         const description = formData.get('description') as string
-        const user_email = formData.get('user_email') as string
-
-        // Note: In an MVP, we'd look up the user by email or create one.
-        // For this demonstration, we'll use a placeholder logic where we expect the 
-        // gestor to be the one creating it, or we'd have a separate lookup.
-        // Here we'll stick to the current user (admin) for simplicity in this demo,
-        // but adding the field shows the intent for the final product.
+        const user_id = formData.get('user_id') as string
 
         const { error } = await supabase
             .from('restaurants')
@@ -36,11 +30,11 @@ export default async function NewPartnerPage() {
                 name,
                 slug,
                 description,
-                user_id: user.id
+                user_id: user_id // Linking to the specified gestor ID
             })
 
         if (!error) {
-            redirect('/admin')
+            redirect('/admin/restaurants')
         }
     }
 
@@ -86,17 +80,16 @@ export default async function NewPartnerPage() {
                         </div>
                     </div>
 
-                    {/* Email do Gestor */}
+                    {/* ID do Gestor */}
                     <div className="space-y-3">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Email do Gestor</label>
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">ID do Gestor (UUID)</label>
                         <input
-                            name="user_email"
+                            name="user_id"
                             required
-                            type="email"
-                            placeholder="gestor@exemplo.com"
+                            placeholder="Ex: 550e8400-e29b-41d4-a716-446655440000"
                             className="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-900 focus:outline-none focus:ring-4 focus:ring-primary/5 transition-all outline-none"
                         />
-                        <p className="text-[10px] font-bold text-slate-300 italic">O gestor deve estar previamente cadastrado na plataforma.</p>
+                        <p className="text-[10px] font-bold text-slate-300 italic">O UUID pode ser encontrado no painel do Supabase ou na listagem de usuários.</p>
                     </div>
 
                     {/* Description */}
