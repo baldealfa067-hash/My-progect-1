@@ -1,8 +1,14 @@
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
+import Link from 'next/link'
 
-export default async function SettingsPage() {
+export default async function SettingsPage({
+    searchParams,
+}: {
+    searchParams: Promise<{ success?: string }>
+}) {
+    const params = await searchParams
     const supabase = await createClient()
     const {
         data: { user },
@@ -48,6 +54,7 @@ export default async function SettingsPage() {
         }
 
         revalidatePath('/dashboard/settings')
+        redirect('/dashboard/settings?success=true')
     }
 
     return (
@@ -60,6 +67,54 @@ export default async function SettingsPage() {
                     <p className="text-[10px] font-bold text-secondary uppercase tracking-widest opacity-50">Identidade e Presença Digital</p>
                 </div>
             </div>
+
+            {/* Success Message */}
+            {params.success && (
+                <div className="premium-card p-1 animate-in slide-in-from-top-4 duration-500">
+                    <div className="bg-green-50 rounded-[2.2rem] p-6 flex items-center gap-4">
+                        <div className="w-12 h-12 bg-green-500 rounded-2xl flex items-center justify-center">
+                            <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p className="text-sm font-black text-green-900">Restaurante atualizado com sucesso!</p>
+                            <p className="text-[10px] font-bold text-green-700 uppercase tracking-widest">Suas alterações foram salvas</p>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Public Menu URL */}
+            {restaurant && (
+                <div className="premium-card p-1">
+                    <div className="bg-white rounded-[2.2rem] p-8 space-y-4">
+                        <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
+                                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p className="text-[10px] font-black text-slate-400 tracking-[0.2em] uppercase mb-1">Cardápio Público</p>
+                                <p className="text-lg font-black text-slate-900 tracking-tight">Compartilhe com seus clientes</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-3 p-4 glass rounded-2xl">
+                            <code className="flex-1 text-sm font-mono font-bold text-primary">
+                                {typeof window !== 'undefined' ? window.location.origin : 'https://my-progect-1.vercel.app'}/menu/{restaurant.slug}
+                            </code>
+                            <Link
+                                href={`/menu/${restaurant.slug}`}
+                                target="_blank"
+                                className="px-6 py-3 bg-primary text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all whitespace-nowrap"
+                            >
+                                Visualizar
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <div className="max-w-3xl">
                 <form action={updateRestaurant} className="space-y-8">

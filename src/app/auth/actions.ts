@@ -40,7 +40,8 @@ export async function signup(formData: FormData) {
     }
 
     revalidatePath('/', 'layout')
-    redirect('/dashboard')
+    // Redirect to settings to create restaurant profile
+    redirect('/dashboard/settings')
 }
 
 export async function logout() {
