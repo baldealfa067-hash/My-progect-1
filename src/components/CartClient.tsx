@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
 
 export function CartClient() {
-    const { cart, total, restaurantId, clearCart, removeFromCart } = useCart()
+    const { cart, total, restaurantId, tableNumber, clearCart, removeFromCart } = useCart()
     const [name, setName] = useState('')
     const [phone, setPhone] = useState('')
     const [paymentMethod, setPaymentMethod] = useState('cash')
@@ -71,6 +71,7 @@ export function CartClient() {
                     customer_name: name,
                     customer_phone: phone,
                     total_amount: total,
+                    table_number: tableNumber ? parseInt(tableNumber) : null,
                     status: 'pending'
                 })
                 .select()

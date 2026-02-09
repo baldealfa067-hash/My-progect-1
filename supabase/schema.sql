@@ -32,6 +32,7 @@ create table public.orders (
   customer_phone text not null,
   status text not null default 'pending' check (status in ('pending', 'accepted', 'ready', 'rejected', 'completed')),
   total_amount decimal(10,2) not null default 0,
+  table_number integer,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   constraint orders_pkey primary key (id)

@@ -25,7 +25,15 @@ interface MenuClientProps {
 }
 
 export function MenuClient({ restaurant, menuItems }: MenuClientProps) {
-    const { addToCart, total, itemCount } = useCart()
+    const { addToCart, total, itemCount, setTableNumber } = useCart()
+
+    React.useEffect(() => {
+        const params = new URLSearchParams(window.location.search)
+        const table = params.get('table')
+        if (table) {
+            setTableNumber(table)
+        }
+    }, [setTableNumber])
 
     return (
         <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary/30">

@@ -12,7 +12,9 @@ export interface CartItem {
 interface CartContextType {
     cart: CartItem[]
     restaurantId: string | null
+    tableNumber: string | null
     addToCart: (item: CartItem, restaurantId: string) => void
+    setTableNumber: (table: string | null) => void
     removeFromCart: (id: string) => void
     clearCart: () => void
     total: number
@@ -24,15 +26,18 @@ const CartContext = createContext<CartContextType | undefined>(undefined)
 export function CartProvider({ children }: { children: React.ReactNode }) {
     const [cart, setCart] = useState<CartItem[]>([])
     const [restaurantId, setRestaurantId] = useState<string | null>(null)
+    const [tableNumber, setTableNumber] = useState<string | null>(null)
 
     // Load cart from localStorage on mount
     useEffect(() => {
         const savedCart = localStorage.getItem('bissaufood_cart')
         const savedRestaurantId = localStorage.getItem('bissaufood_restaurant_id')
+        const savedTableNumber = localStorage.getItem('bissaufood_table_number')
         if (savedCart) {
             try {
                 setCart(JSON.parse(savedCart))
                 setRestaurantId(savedRestaurantId)
+                setTableNumber(savedTableNumber)
             } catch (e) {
                 console.error('Failed to parse cart', e)
             }
@@ -47,7 +52,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         } else {
             localStorage.removeItem('bissaufood_restaurant_id')
         }
-    }, [cart, restaurantId])
+        if (tableNumber) {
+            localStorage.setItem('bissaufood_table_number', tableNumber)
+        } else {
+            localStorage.removeItem('bissaufood_table_number')
+        }
+    }, [cart, restaurantId, tableNumber])
 
     const addToCart = (item: CartItem, rid: string) => {
         setCart(prev => {
@@ -83,7 +93,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     const itemCount = cart.reduce((acc, curr) => acc + curr.quantity, 0)
 
     return (
-        <CartContext.Provider value={{ cart, restaurantId, addToCart, removeFromCart, clearCart, total, itemCount }}>
+        <CartContext.Provider value={{ cart, restaurantId, tableNumber, addToCart, setTableNumber, removeFromCart, clearCart, total, itemCount }}>
             {children}
         </CartContext.Provider>
     )

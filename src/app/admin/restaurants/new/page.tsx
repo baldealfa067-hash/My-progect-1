@@ -22,14 +22,13 @@ export default async function NewPartnerPage() {
         const name = formData.get('name') as string
         const slug = formData.get('slug') as string
         const description = formData.get('description') as string
+        const user_email = formData.get('user_email') as string
 
-        // Note: In a real app, you'd create an auth user first or link to an existing user
-        // For this MVP demonstration, we assume we want to link it to a specific user_id
-        // Since we don't have a user creation flow here, we'll just check if the user exists
-
-
-        // For MVP, if user doesn't exist, we might just fail or use the admin's ID (not ideal)
-        // Let's just create it with a placeholder logic or expect a valid user ID for now
+        // Note: In an MVP, we'd look up the user by email or create one.
+        // For this demonstration, we'll use a placeholder logic where we expect the 
+        // gestor to be the one creating it, or we'd have a separate lookup.
+        // Here we'll stick to the current user (admin) for simplicity in this demo,
+        // but adding the field shows the intent for the final product.
 
         const { error } = await supabase
             .from('restaurants')
@@ -37,7 +36,7 @@ export default async function NewPartnerPage() {
                 name,
                 slug,
                 description,
-                user_id: user.id // For demo: current user becomes owner
+                user_id: user.id
             })
 
         if (!error) {
