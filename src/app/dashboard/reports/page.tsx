@@ -15,7 +15,21 @@ export default async function ReportsPage() {
         .eq('user_id', user.id)
         .single()
 
-    const { data: orderStats } = await supabase
+    interface OrderItem {
+        quantity: number
+        menu_items: {
+            name: string
+        } | null
+    }
+
+    interface OrderWithItems {
+        status: string
+        total_amount: number
+        created_at: string
+        order_items: OrderItem[]
+    }
+
+    const { data } = await supabase
         .from('orders')
         .select(`
             status, 
@@ -31,15 +45,15 @@ export default async function ReportsPage() {
         .eq('restaurant_id', restaurant?.id)
         .order('created_at', { ascending: false })
 
-    const totalRevenue = orderStats?.reduce((acc: number, order: { total_amount: number }) => acc + Number(order.total_amount), 0) || 0
-    const completedOrdersCount = orderStats?.filter((o: { status: string }) => o.status === 'completed').length || 0
+    const orderStats = data as unknown as OrderWithItems[]
+
+    const totalRevenue = orderStats?.reduce((acc: number, order: OrderWithItems) => acc + Number(order.total_amount), 0) || 0
+    const completedOrdersCount = orderStats?.filter((o: OrderWithItems) => o.status === 'completed').length || 0
 
     // Top Products Calculation
     const productSales: { [key: string]: number } = {}
-    orderStats?.forEach((order: any) => {
-        // @ts-ignore - Supabase nested type complexity
-        order.order_items?.forEach((item: any) => {
-            // @ts-ignore
+    orderStats?.forEach((order) => {
+        order.order_items?.forEach((item) => {
             const name = item.menu_items?.name
             if (name) {
                 productSales[name] = (productSales[name] || 0) + item.quantity
