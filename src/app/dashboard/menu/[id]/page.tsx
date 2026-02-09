@@ -107,6 +107,7 @@ export default async function EditMenuItemPage({
                                     defaultValue={item.price}
                                     placeholder="0"
                                     className="w-full px-6 py-4 glass rounded-2xl text-sm font-bold placeholder:text-secondary/30 focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all font-mono"
+                                />
                             </div>
                         </div>
 
